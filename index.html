@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momentum Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box} body{
+margin:0;font-family:Inter,sans-serif;color:#1f2937;
+background:linear-gradient(135deg,#fdfcfb,#e2ebf0);
+min-height:100vh}
+.bg1,.bg2{position:fixed;border-radius:50%;filter:blur(80px);z-index:-1}
+.bg1{width:400px;height:400px;background:#c7d2fe;top:-100px;left:-100px}
+.bg2{width:500px;height:500px;background:#fde68a;right:-150px;top:100px}
+.container{max-width:900px;margin:auto;padding:24px}
+.glass{background:rgba(255,255,255,.65);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.4);border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+.hero{padding:60px;text-align:center}
+h1{font-size:3rem;margin:0}
+.btn{background:#4f46e5;color:#fff;border:none;padding:14px 24px;border-radius:14px;cursor:pointer;font-weight:700}
+.hidden{display:none}
+.progress{height:12px;background:#e5e7eb;border-radius:99px;overflow:hidden}
+.bar{height:100%;width:0;background:linear-gradient(90deg,#4f46e5,#7c3aed)}
+.qbox{padding:40px;margin-top:20px}
+.option{padding:16px;border:2px solid #d1d5db;border-radius:16px;margin:10px 0;cursor:pointer;transition:.2s}
+.option.selected{border-color:#4f46e5;background:#eef2ff;transform:translateY(-2px)}
+.nav{display:flex;justify-content:space-between;margin-top:20px}
+.result{padding:40px}
+.check{margin:12px 0;padding:14px;background:#f9fafb;border-radius:12px}
+</style>
+</head>
+<body>
+<div class="bg1"></div><div class="bg2"></div>
+<div class="container">
+<div class="glass hero" id="hero">
+<h1>Fed up with overthinking?</h1>
+<p>Find the hidden pattern slowing your progress and get a personalized action plan.</p>
+<button class="btn" onclick="startQuiz()">Start Assessment</button>
+</div>
+
+<div id="quiz" class="glass qbox hidden">
+<div class="progress"><div id="bar" class="bar"></div></div>
+<p id="counter"></p>
+<h2 id="question"></h2>
+<div id="options"></div>
+<div class="nav">
+<button class="btn" onclick="prevQ()">Previous</button>
+<button class="btn" onclick="nextQ()">Next</button>
+</div>
+</div>
+
+<div id="result" class="glass result hidden"></div>
+</div>
+
+<script>
+const qs=[
+["I spend more time thinking than doing.","analyst"],
+["I need more information before I begin.","analyst"],
+["I delay because I want things perfect.","perfectionist"],
+["I frequently change goals.","drifter"],
+["I know what to do but don't act.","analyst"],
+["I consume more content than I implement.","analyst"],
+["I avoid mistakes becoming visible.","perfectionist"],
+["I feel mentally exhausted before starting.","overloaded"],
+["I have many ideas but little execution.","drifter"],
+["I wait until I feel motivated.","overloaded"],
+["I often second-guess decisions.","perfectionist"],
+["I struggle to prioritize.","drifter"],
+["I delay important projects.","drifter"],
+["I feel overwhelmed.","overloaded"],
+["I would progress faster if I acted sooner.","analyst"]
+];
+const labels=["Never","Rarely","Sometimes","Often","Almost Always"];
+let current=0;
+let answers=new Array(qs.length).fill(null);
+
+function startQuiz(){
+hero.classList.add('hidden');
+quiz.classList.remove('hidden');
+render();
+}
+
+function render(){
+bar.style.width=((current)/qs.length*100)+"%";
+counter.innerText=`Question ${current+1} of ${qs.length}`;
+question.innerText=qs[current][0];
+options.innerHTML='';
+labels.forEach((t,i)=>{
+let d=document.createElement('div');
+d.className='option'+(answers[current]===i?' selected':'');
+d.innerText=t;
+d.onclick=()=>{answers[current]=i;render();};
+options.appendChild(d);
+});
+}
+
+function prevQ(){if(current>0){current--;render();}}
+function nextQ(){
+if(answers[current]===null){alert("Select an answer.");return;}
+if(current<qs.length-1){current++;render();}
+else finish();
+}
+
+function finish(){
+let s={analyst:0,perfectionist:0,drifter:0,overloaded:0};
+answers.forEach((v,i)=>s[qs[i][1]]+=v);
+let ranked=Object.entries(s).sort((a,b)=>b[1]-a[1]);
+showResult(ranked[0][0],ranked[1][0]);
+}
+
+function showResult(primary,secondary){
+quiz.classList.add('hidden');
+result.classList.remove('hidden');
+
+const details={
+analyst:{
+title:"The Analyst",
+desc:"You are stuck in preparation mode. You search for certainty before action. The problem is that certainty rarely comes first—feedback does.",
+checks:[
+"Limit research sessions to a fixed time block. Once the timer ends, take one real-world action.",
+"Replace 'What else should I learn?' with 'What can I test today?'",
+"Make decisions with the information you already have instead of endlessly collecting more.",
+"Track completed actions, not hours of planning or learning.",
+"Create a habit of launching small imperfect experiments every week."
+]},
+perfectionist:{
+title:"The Perfectionist",
+desc:"You delay progress because you associate mistakes with failure. In reality, progress comes from iteration.",
+checks:[
+"Ship version one before you feel ready and improve it later.",
+"Set deadlines that force completion rather than endless refinement.",
+"Measure output volume, not perfection.",
+"Actively look for feedback instead of waiting until everything feels flawless.",
+"Treat every project as practice, not a final exam."
+]},
+drifter:{
+title:"The Drifter",
+desc:"You have motivation and ideas, but your attention is split across too many directions.",
+checks:[
+"Choose one primary goal for the next 30 days.",
+"Write down new ideas but do not switch focus immediately.",
+"Define a single weekly metric that matters most.",
+"Review priorities only once per week.",
+"Reduce the number of active projects to increase momentum."
+]},
+overloaded:{
+title:"The Overloaded Achiever",
+desc:"Your challenge is not laziness. Your system is carrying too much complexity and mental load.",
+checks:[
+"Identify and eliminate low-value commitments.",
+"Protect sleep, recovery and downtime as seriously as work.",
+"Reduce daily priorities to three meaningful tasks.",
+"Schedule focus blocks without notifications.",
+"Create recovery rituals that prevent burnout from accumulating."
+]}
+};
+
+result.innerHTML=`
+<h1>${details[primary].title}</h1>
+
+<h3>Secondary Pattern: ${details[secondary].title}</h3>
+
+<p>${details[primary].desc}</p>
+
+<h2>Your Personalized Action Checklist</h2>
+
+${details[primary].checks.map(x=>`<div class="check">${x}</div>`).join('')}
+
+<div class="premium-next-step">
+
+    <p class="premium-text">
+        Awareness is valuable.
+But awareness alone rarely changes anything.
+
+Now you know what is slowing you down.
+
+The next step is learning how to build momentum consistently, make progress even when motivation disappears, and create a system that keeps you moving forward.
+
+If you're serious about creating real momentum instead of collecting more "information", this is your next step:
+    </p>
+
+    <a href="https://zorvensystems.netlify.app/" class="premium-btn">
+        [CLICKABLE]
+    </a>
+
+</div>
+`;
+
+} 
+
+</script>
+</body>
+</html>
+
+</script>
+</body>
+</html>
