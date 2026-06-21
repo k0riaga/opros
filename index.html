@@ -26,6 +26,56 @@ h1{font-size:3rem;margin:0}
 .option.selected{border-color:#4f46e5;background:#eef2ff;transform:translateY(-2px)}
 .nav{display:flex;justify-content:space-between;margin-top:20px}
 .result{padding:40px}
+.info-card,
+.about-card{
+padding:35px;
+margin-top:25px;
+text-align:center;
+}
+
+.badge{
+display:inline-block;
+padding:10px 18px;
+border-radius:999px;
+background:#eef2ff;
+color:#4f46e5;
+font-weight:800;
+font-size:12px;
+letter-spacing:1px;
+margin-bottom:20px;
+}
+
+.info-card h2{
+font-size:32px;
+margin-bottom:20px;
+}
+
+.info-card p{
+max-width:700px;
+margin:15px auto;
+line-height:1.8;
+font-size:17px;
+}
+
+.about-btn{
+width:100%;
+padding:20px;
+font-size:18px;
+font-weight:800;
+border:none;
+border-radius:16px;
+cursor:pointer;
+background:white;
+}
+
+.about-content{
+display:none;
+max-width:750px;
+margin:auto;
+padding-top:25px;
+line-height:1.9;
+text-align:left;
+}
 .check{margin:12px 0;padding:14px;background:#f9fafb;border-radius:12px}
 </style>
 </head>
@@ -34,7 +84,77 @@ h1{font-size:3rem;margin:0}
 <div class="container">
 <div class="glass hero" id="hero">
 <h2>Fed up with overthinking?</h2>
-<p>Find the hidden pattern slowing your progress and get a personalized action plan.</p>
+<div class="glass info-card">
+</div>
+
+<h2>
+    Discover What's REALLY Holding You Back
+</h2>
+
+<p>
+    Most people think they have a motivation problem.
+</p>
+
+<p>
+    In reality, they're usually trapped in hidden patterns that keep them overthinking, procrastinating, and starting over again and again.
+</p>
+
+<p>
+    This assessment will identify your biggest blocker, explain why it happens, and give you a clear action plan to start fixing it.
+</p>
+
+<p>
+    You'll also unlock access to additional systems designed to help you build momentum and create consistent progress.
+</p>
+
+
+<div class="glass about-card">
+
+    <button class="about-btn" onclick="toggleAbout()">
+        WHO IS MR. ZORVEN?
+    </button>
+
+    <div id="aboutContent" class="about-content">
+
+        <p>
+            My name is <strong>Mr. Zorven</strong> (Alvin Deviz).
+        </p>
+
+  <p>
+        I help people who feel stuck despite having ambition, goals, and potential.
+    </p>
+
+    <p>
+        The people I work with usually aren't lazy.
+    </p>
+
+    <p>
+        They're intelligent, capable, and know what they should be doing — but they constantly find themselves trapped in cycles of overthinking, procrastination, inconsistency, burnout, perfectionism, or starting over.
+    </p>
+
+    <p>
+        Over the years, my team and I (perhaps you got here from one of its members, or perhaps from my channel) have devoted thousands of hours to studying why this happens and, more importantly, what actually helps people break these stereotypes.
+    </p>
+
+    <p>
+        The result is a collection of practical Systems designed to help people build momentum, make better decisions, take action more consistently, and create progress they can actually sustain.
+    </p>
+
+    <p>
+        These Systems aren't built around temporary motivation.
+    </p>
+
+    <p>
+        They're built around something much more reliable: structure, psychology, and repeatable action.
+    </p>
+
+    <p>
+        After completing this assessment, you'll unlock access to those Systems so you can go beyond identifying the problem and start solving it.
+    </p>
+
+    </div>
+
+</div>
 <button class="btn" onclick="startQuiz()">Start Assessment</button>
 </div>
 
@@ -187,11 +307,17 @@ If you're serious about creating real momentum instead of collecting more "infor
 `;
 
 } 
+function toggleAbout(){
 
-</script>
-</body>
-</html>
+const el = document.getElementById("aboutContent");
 
+if(el.style.display === "block"){
+    el.style.display = "none";
+}else{
+    el.style.display = "block";
+}
+
+}
 </script>
 </body>
 </html>
